@@ -221,7 +221,6 @@
               <span class="tc-action-link" @click="importThemeTrigger">{{ t('import') }}</span>
               <span class="tc-action-link danger" @click="deleteTheme">{{ t('del') }}</span>
             </div>
-            <input type="file" ref="importThemeFile" accept=".json" style="display:none" @change="onThemeImport" />
           </div>
 
           <!-- 游标（Mascot）挂载系统 -->

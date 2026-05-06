@@ -23,23 +23,24 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, type CSSProperties } from 'vue';
+
 // 接收来自 App.vue 传递下来的属性参数
 const props = defineProps(['chapters', 'duration', 'currentTime', 'fps', 'config']);
 
 // 计算当前的播放进度浮点数比例 (0 ~ 1)，用于底层矩阵计算
 const currentProgressRatio = computed(() => (props.duration > 0 ? (props.currentTime / props.duration) : 0));
 
-// ====== 外层容器动态样式 ======
-const wrapperStyle = computed(() => ({ padding: `0 ${props.config.padding}px`, width: '100%', height: '100%', display: 'flex', alignItems: 'center', boxSizing: 'border-box' }));
-const trackGroupStyle = computed(() => ({ height: `${props.config.trackHeight}px`, position: 'relative', width: '100%' }));
-const progressTrackStyle = computed(() => ({
+// ====== 外层容器动态样式 (加入 CSSProperties 类型断言解决 TS 报错) ======
+const wrapperStyle = computed<CSSProperties>(() => ({ padding: `0 ${props.config.padding}px`, width: '100%', height: '100%', display: 'flex', alignItems: 'center', boxSizing: 'border-box' }));
+const trackGroupStyle = computed<CSSProperties>(() => ({ height: `${props.config.trackHeight}px`, position: 'relative', width: '100%' }));
+const progressTrackStyle = computed<CSSProperties>(() => ({
   backgroundColor: props.config.trackColor, border: props.config.trackBorderWidth > 0 ? `${props.config.trackBorderWidth}px solid ${props.config.trackBorderColor}` : 'none',
   position: 'absolute', inset: 0, overflow: 'hidden', display: 'flex', boxSizing: 'border-box'
 }));
 
 // 🚀 预览不卡顿的核心秘密：利用 CSS3 Transform Scale 触发 GPU 加速渲染
-const progressBarStyle = computed(() => ({ 
+const progressBarStyle = computed<CSSProperties>(() => ({ 
   position: 'absolute', 
   left: 0, 
   top: 0,
@@ -54,23 +55,23 @@ const progressBarStyle = computed(() => ({
 }));
 
 // ====== 文字与修饰物动态样式 ======
-const separatorStyle = computed(() => ({ backgroundColor: props.config.separatorColor, width: `${props.config.separatorWidth || 2}px`, height: '100%', position: 'absolute', left: 0 }));
+const separatorStyle = computed<CSSProperties>(() => ({ backgroundColor: props.config.separatorColor, width: `${props.config.separatorWidth || 2}px`, height: '100%', position: 'absolute', left: 0 }));
 
-const titleTextStyle = computed(() => ({ 
+const titleTextStyle = computed<CSSProperties>(() => ({ 
   color: props.config.textColor, fontSize: `${props.config.textSize}px`, fontWeight: props.config.textWeight, fontFamily: props.config.fontFamily,
   padding: '0 10px', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', 
   textOverflow: 'ellipsis', whiteSpace: 'normal', wordBreak: 'break-all', lineHeight: '1.2', zIndex: 2, textAlign: 'center'
 }));
 
-const mascotContainerStyle = computed(() => ({
-  position: 'absolute', top: '0', height: '100%', width: '0px', 
+const mascotContainerStyle = computed<CSSProperties>(() => ({
+  position: 'absolute', top: 0, height: '100%', width: '0px', 
   left: (currentProgressRatio.value * 100) + '%', // 将浮点比例转为百分比用于游标追踪定位
   zIndex: 10, pointerEvents: 'none',
   willChange: 'left',
   transition: 'none !important'
 }));
 
-const mascotImageStyle = computed(() => ({ 
+const mascotImageStyle = computed<CSSProperties>(() => ({ 
   height: `${props.config.trackHeight * (props.config.mascotScale || 1)}px`, display: 'block' 
 }));
 
@@ -85,7 +86,7 @@ function getPercent(timeStr: string) {
 }
 
 // 动态计算出每个章节标题应该放置的起始点绝对位置
-function getChapterMarkerStyle(chapter: any) {
+function getChapterMarkerStyle(chapter: any): CSSProperties {
   return { 
     position: 'absolute', top: 0, height: '100%', left: getPercent(chapter.time) + '%', 
     width: getChapterWidth(chapter) + '%', display: 'flex', alignItems: 'center', justifyContent: 'center',
