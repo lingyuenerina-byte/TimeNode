@@ -1,7 +1,27 @@
-# Tauri + Vue + TypeScript
+# TimeNode (刻度)
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+TimeNode is a desktop-based timecode and progress bar rendering engine. It generates professional video assets containing smooth progress bars, chapter titles, and scrolling timecodes based on user-defined markers. These assets can be seamlessly overlaid in post-production software like Premiere Pro or DaVinci Resolve.
 
-## Recommended IDE Setup
+## Features
 
-- [VS Code](https://code.visualstudio.com/) + [Vue - Official](https://marketplace.visualstudio.com/items?itemName=Vue.volar) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer)
+* **Smooth Sub-pixel Rendering**: Utilizes WebGL sub-pixel anti-aliasing to calculate progress, eliminating jitter and ensuring ultra-smooth progress bar animation even at low pixel movement speeds.
+* **Professional Export Formats**: Supports exporting standard H.264 green screen videos (MP4) and Apple ProRes 4444 videos with a full alpha channel (MOV) for professional workflows.
+* **Highly Customizable Design**: Provides an intuitive GUI to tweak track dimensions, colors, borders, typography, and supports mounting custom cursor images (Mascots).
+* **Isolated Local File Management**:
+  * **Portable Fonts Loading**: Automatically reads and renders font files (TTF/OTF/WOFF) from the `fonts` folder in the root directory without requiring OS-level installation.
+  * **Preset System**: All style configurations are saved as JSON files in the local `presets` folder, supporting easy export and import across devices.
+
+## Installation & Setup
+
+This application is a standalone, portable executable. No development environment setup is required.
+
+1. Download the standalone `TimeNode.exe` file.
+2. **⚠️ Required Dependency**: The video rendering pipeline relies on FFmpeg. You must download `ffmpeg.exe` and place it in the exact same directory as `TimeNode.exe` (or add it to your system's PATH environment variable).
+3. Double-click the executable to launch the app.
+
+## Folder Structure Notes
+
+Upon the first launch, the application will automatically generate the following folders in the same directory as the executable. Ensure the application has write permissions for its folder:
+* `/fonts`: Drop your custom font files here to use them directly in the app.
+* `/presets`: Stores your saved `.json` style configurations.
+* `/output`: The default directory for exported videos.
